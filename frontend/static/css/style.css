@@ -190,26 +190,3 @@ h1 {
     color: #fff;
     padding: 10px;
 }
-
-#userQuestion {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px;
-    font-size: 16px;
-    border: 2px solid #444;
-    border-radius: 8px;
-    background-color: #1a1a1a;
-    color: #fff;
-    margin-bottom: 20px;
-    transition: border-color 0.3s ease;
-}
-
-#userQuestion:focus {
-    outline: none;
-    border-color: #666;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
-}
-
-#userQuestion::placeholder {
-    color: #666;
-}

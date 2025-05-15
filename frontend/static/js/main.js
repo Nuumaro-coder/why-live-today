@@ -22,21 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const responderRoleInput = document.getElementById('responderRole');
     const clearResponderRoleBtn = document.getElementById('clearResponderRole');
     const currentRoleDiv = document.getElementById('currentRole');
-    const userQuestionInput = document.getElementById('userQuestion');
 
-    // Сохраняем роли и вопрос в localStorage
+    // Сохраняем роли в localStorage
     let userRole = localStorage.getItem('userRole') || '';
     let responderRole = localStorage.getItem('responderRole') || 'Уставший доктор';
-    let userQuestion = localStorage.getItem('userQuestion') || 'Зачем жить?';
     
-    console.log('Loaded from localStorage:', { userRole, responderRole, userQuestion }); // отладка
+    console.log('Loaded from localStorage:', { userRole, responderRole });
     
     // Устанавливаем сохраненные значения
     responderRoleInput.value = responderRole;
-    userQuestionInput.value = userQuestion;
     
     if (userRole) {
-        console.log('Setting current role display to:', userRole); // отладка
+        console.log('Setting current role display to:', userRole);
         currentRoleDiv.textContent = `Текущая роль: ${userRole}`;
     }
 
@@ -44,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     clearResponderRoleBtn.addEventListener('click', () => {
         responderRoleInput.value = '';
         responderRoleInput.focus();
-        // Сохраняем пустую роль
         localStorage.setItem('responderRole', '');
     });
 
@@ -82,23 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     userRoleInput.addEventListener('keypress', async (e) => {
         if (e.key === 'Enter') {
             if (saveUserRole()) {
-                // Сразу запускаем генерацию
                 await getReason();
             }
-        }
-    });
-
-    // Сохраняем вопрос пользователя
-    userQuestionInput.addEventListener('change', () => {
-        userQuestion = userQuestionInput.value.trim() || 'Зачем жить?';
-        localStorage.setItem('userQuestion', userQuestion);
-    });
-
-    // Добавляем обработку нажатия Enter для поля вопроса
-    userQuestionInput.addEventListener('keypress', async (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Предотвращаем стандартное поведение
-            await getReason();
         }
     });
 
@@ -182,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Получаем текущий вопрос
-            const question = userQuestionInput.value.trim() || 'Зачем жить?';
+            const question = 'Зачем жить?';
             console.log('Current question:', question);
 
             // Выбираем случайный промпт
