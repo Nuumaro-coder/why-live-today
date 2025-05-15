@@ -1,5 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Script loaded'); // для отладки
+    
+    // Проверяем, что Puter.js загружен
+    if (typeof puter === 'undefined') {
+        console.error('Puter.js не загружен!');
+        alert('Ошибка: Puter.js не загружен. Пожалуйста, обновите страницу.');
+        return;
+    }
+
+    // Проверяем, что AI модуль доступен
+    if (!puter.ai || typeof puter.ai.chat !== 'function') {
+        console.error('Puter AI модуль не доступен!');
+        alert('Ошибка: AI модуль не доступен. Пожалуйста, обновите страницу.');
+        return;
+    }
+
     const generateBtn = document.getElementById('generate');
     const reasonDiv = document.getElementById('reason');
     const loadingDiv = document.getElementById('loading');
@@ -147,8 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getReason() {
         try {
-            console.log('Starting getReason function...'); // Отладочное сообщение
+            console.log('Starting getReason function...');
             
+            // Проверяем доступность Puter.js перед каждым запросом
+            if (typeof puter === 'undefined' || !puter.ai || typeof puter.ai.chat !== 'function') {
+                throw new Error('Puter.js не инициализирован или AI модуль недоступен');
+            }
+
             // Показываем индикатор загрузки
             loadingDiv.style.display = 'block';
             generateBtn.disabled = true;
@@ -156,22 +176,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Проверяем, что роль отвечающего введена
             if (!responderRoleInput.value.trim()) {
-                console.log('Responder role is empty'); // Отладочное сообщение
+                console.log('Responder role is empty');
                 reasonDiv.textContent = 'Пожалуйста, выберите или введите роль отвечающего';
                 return;
             }
 
             // Получаем текущий вопрос
             const question = userQuestionInput.value.trim() || 'Зачем жить?';
-            console.log('Current question:', question); // Отладочное сообщение
+            console.log('Current question:', question);
 
             // Выбираем случайный промпт
             const prompt = prompts[Math.floor(Math.random() * prompts.length)];
-            console.log('Selected prompt:', prompt); // Отладочное сообщение
+            console.log('Selected prompt:', prompt);
 
             // Формируем запрос с учетом ролей
             let systemPrompt = getSystemPrompt();
-            console.log('System prompt:', systemPrompt); // Отладочное сообщение
+            console.log('System prompt:', systemPrompt);
             
             if (userRole) {
                 systemPrompt += `\nПеред тобой ${userRole}. ` +
@@ -181,24 +201,50 @@ document.addEventListener('DOMContentLoaded', () => {
                               `Будь максимально честным и циничным. `;
             }
 
-            console.log('Attempting to generate response...'); // Отладочное сообщение
-            // Используем Puter.js для генерации текста
-            const response = await puter.ai.chat(systemPrompt + `\nВопрос: ${question}\n` + prompt);
+            console.log('Attempting to generate response...');
             
-            console.log('Response received:', response); // Отладочное сообщение
+            // Добавляем таймаут для запроса
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Превышено время ожидания ответа')), 30000);
+            });
+
+            // Используем Promise.race для добавления таймаута
+            const response = await Promise.race([
+                puter.ai.chat(systemPrompt + `\nВопрос: ${question}\n` + prompt),
+                timeoutPromise
+            ]);
+            
+            console.log('Response received:', response);
+            
+            if (!response || typeof response !== 'string' || response.trim() === '') {
+                throw new Error('Получен пустой ответ от AI');
+            }
+
             reasonDiv.textContent = response;
 
         } catch (error) {
-            console.error('Detailed error:', error); // Подробное логирование ошибки
-            console.error('Error name:', error.name); // Имя ошибки
-            console.error('Error message:', error.message); // Сообщение ошибки
-            console.error('Error stack:', error.stack); // Стек вызовов
-            reasonDiv.textContent = 'Произошла ошибка при генерации ответа. Пожалуйста, попробуйте еще раз.';
+            console.error('Detailed error:', error);
+            console.error('Error name:', error.name);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
+            
+            let errorMessage = 'Произошла ошибка при генерации ответа. ';
+            
+            if (error.message.includes('не инициализирован')) {
+                errorMessage += 'Пожалуйста, обновите страницу.';
+            } else if (error.message.includes('время ожидания')) {
+                errorMessage += 'Сервер не отвечает. Попробуйте позже.';
+            } else if (error.message.includes('пустой ответ')) {
+                errorMessage += 'AI вернул пустой ответ. Попробуйте еще раз.';
+            } else {
+                errorMessage += 'Пожалуйста, попробуйте еще раз.';
+            }
+            
+            reasonDiv.textContent = errorMessage;
         } finally {
-            // Скрываем индикатор загрузки
             loadingDiv.style.display = 'none';
             generateBtn.disabled = false;
-            console.log('getReason function completed'); // Отладочное сообщение
+            console.log('getReason function completed');
         }
     }
 
