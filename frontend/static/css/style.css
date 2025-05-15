@@ -1,0 +1,192 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #000;
+    color: #fff;
+}
+
+.container {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 90%;
+}
+
+h1 {
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#reason {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+#userRole {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    width: 100%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+}
+
+#userRole::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#userRole:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.role-display {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    font-size: 1.1rem;
+    color: #fff;
+    display: inline-block;
+}
+
+#generate {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    background: #fff;
+    border: none;
+    border-radius: 25px;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+#generate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+    background: #f0f0f0;
+}
+
+#generate:active {
+    transform: translateY(1px);
+}
+
+#generate:disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#loading {
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+}
+
+.role-select-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    align-items: center;
+}
+
+.role-select {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.clear-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.clear-button:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.clear-button:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Стили для выпадающего списка datalist */
+.role-select::-webkit-calendar-picker-indicator {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.role-select::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Скрываем стандартную стрелку в Firefox */
+.role-select::-moz-list-bullet {
+    display: none;
+}
+
+.role-select option {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+}

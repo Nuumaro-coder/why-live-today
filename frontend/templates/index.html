@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Зачем жить?</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://js.puter.com/v2/"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Зачем жить?</h1>
+        <div class="input-group">
+            <div class="role-select-container">
+                <input type="text" id="responderRole" list="responderRoles" class="role-select" placeholder="Кто будет отвечать? (выберите из списка или введите свой вариант)" />
+                <button type="button" id="clearResponderRole" class="clear-button" title="Очистить и показать список">▼</button>
+            </div>
+            <datalist id="responderRoles">
+                <option value="Уставший доктор">
+                <option value="Циничный учитель">
+                <option value="Раздраженный таксист">
+                <option value="Выгоревший программист">
+                <option value="Утомленная кассирша">
+                <option value="Пофигист-бармен">
+                <option value="Скучающий охранник">
+                <option value="Философ-дворник">
+                <option value="Уставший психолог">
+                <option value="Циничный адвокат">
+                <option value="Разочарованный тренер">
+                <option value="Выгоревший менеджер">
+                <option value="Утомленный продавец">
+                <option value="Пофигист-студент">
+                <option value="Скучающий пенсионер">
+                <option value="Философ-безработный">
+            </datalist>
+        </div>
+        <div class="input-group">
+            <input type="text" id="userRole" placeholder="Кто ты? (например: студент, программист, мама, спортсмен...) Нажми Enter для генерации" />
+        </div>
+        <div id="currentRole" class="role-display"></div>
+        <div id="reason"></div>
+        <button id="generate">Нажми меня</button>
+        <div id="loading" style="display: none;">Генерируем причину...</div>
+    </div>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
