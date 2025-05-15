@@ -79,6 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('userQuestion', userQuestion);
     });
 
+    // Добавляем обработку нажатия Enter для поля вопроса
+    userQuestionInput.addEventListener('keypress', async (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Предотвращаем стандартное поведение
+            await getReason();
+        }
+    });
+
     // Получаем системный промпт в зависимости от роли отвечающего
     function getSystemPrompt() {
         // Базовые промпты для известных ролей
