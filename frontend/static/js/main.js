@@ -147,6 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function getReason() {
         try {
+            console.log('Starting getReason function...'); // Отладочное сообщение
+            
             // Показываем индикатор загрузки
             loadingDiv.style.display = 'block';
             generateBtn.disabled = true;
@@ -154,19 +156,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Проверяем, что роль отвечающего введена
             if (!responderRoleInput.value.trim()) {
+                console.log('Responder role is empty'); // Отладочное сообщение
                 reasonDiv.textContent = 'Пожалуйста, выберите или введите роль отвечающего';
                 return;
             }
 
             // Получаем текущий вопрос
             const question = userQuestionInput.value.trim() || 'Зачем жить?';
+            console.log('Current question:', question); // Отладочное сообщение
 
             // Выбираем случайный промпт
             const prompt = prompts[Math.floor(Math.random() * prompts.length)];
-            console.log('Using prompt:', prompt);
+            console.log('Selected prompt:', prompt); // Отладочное сообщение
 
             // Формируем запрос с учетом ролей
             let systemPrompt = getSystemPrompt();
+            console.log('System prompt:', systemPrompt); // Отладочное сообщение
             
             if (userRole) {
                 systemPrompt += `\nПеред тобой ${userRole}. ` +
@@ -176,19 +181,24 @@ document.addEventListener('DOMContentLoaded', () => {
                               `Будь максимально честным и циничным. `;
             }
 
+            console.log('Attempting to generate response...'); // Отладочное сообщение
             // Используем Puter.js для генерации текста
             const response = await puter.ai.chat(systemPrompt + `\nВопрос: ${question}\n` + prompt);
             
-            console.log('Response:', response);
+            console.log('Response received:', response); // Отладочное сообщение
             reasonDiv.textContent = response;
 
         } catch (error) {
-            console.error('Error:', error);
-            reasonDiv.textContent = 'Произошла ошибка. Попробуйте еще раз.';
+            console.error('Detailed error:', error); // Подробное логирование ошибки
+            console.error('Error name:', error.name); // Имя ошибки
+            console.error('Error message:', error.message); // Сообщение ошибки
+            console.error('Error stack:', error.stack); // Стек вызовов
+            reasonDiv.textContent = 'Произошла ошибка при генерации ответа. Пожалуйста, попробуйте еще раз.';
         } finally {
             // Скрываем индикатор загрузки
             loadingDiv.style.display = 'none';
             generateBtn.disabled = false;
+            console.log('getReason function completed'); // Отладочное сообщение
         }
     }
 
