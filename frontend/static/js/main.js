@@ -7,16 +7,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const responderRoleInput = document.getElementById('responderRole');
     const clearResponderRoleBtn = document.getElementById('clearResponderRole');
     const currentRoleDiv = document.getElementById('currentRole');
+    const userQuestionInput = document.getElementById('userQuestion');
 
-    // Сохраняем роли в localStorage
+    // Сохраняем роли и вопрос в localStorage
     let userRole = localStorage.getItem('userRole') || '';
-    console.log('Loaded userRole from localStorage:', userRole); // отладка
-    
     let responderRole = localStorage.getItem('responderRole') || 'Уставший доктор';
-    console.log('Loaded responderRole from localStorage:', responderRole); // отладка
+    let userQuestion = localStorage.getItem('userQuestion') || 'Зачем жить?';
     
-    // Устанавливаем сохраненную роль отвечающего
+    console.log('Loaded from localStorage:', { userRole, responderRole, userQuestion }); // отладка
+    
+    // Устанавливаем сохраненные значения
     responderRoleInput.value = responderRole;
+    userQuestionInput.value = userQuestion;
     
     if (userRole) {
         console.log('Setting current role display to:', userRole); // отладка
@@ -33,11 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Промпты для генерации
     const prompts = [
-        "Напиши циничный ответ на вопрос 'Зачем жить?', начиная с 'Знаете что...'",
-        "Напиши циничный ответ на вопрос 'Зачем жить?', начиная с 'Если честно...'",
-        "Напиши циничный ответ на вопрос 'Зачем жить?', начиная с 'Слушайте...'",
-        "Напиши циничный ответ на вопрос 'Зачем жить?', начиная с 'По правде говоря...'",
-        "Напиши циничный ответ на вопрос 'Зачем жить?', начиная с 'Давайте начистоту...'"
+        "Напиши циничный ответ, начиная с 'Знаете что...'",
+        "Напиши циничный ответ, начиная с 'Если честно...'",
+        "Напиши циничный ответ, начиная с 'Слушайте...'",
+        "Напиши циничный ответ, начиная с 'По правде говоря...'",
+        "Напиши циничный ответ, начиная с 'Давайте начистоту...'"
     ];
 
     // Функция для сохранения роли пользователя
@@ -69,6 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 await getReason();
             }
         }
+    });
+
+    // Сохраняем вопрос пользователя
+    userQuestionInput.addEventListener('change', () => {
+        userQuestion = userQuestionInput.value.trim() || 'Зачем жить?';
+        localStorage.setItem('userQuestion', userQuestion);
     });
 
     // Получаем системный промпт в зависимости от роли отвечающего
@@ -142,6 +150,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Получаем текущий вопрос
+            const question = userQuestionInput.value.trim() || 'Зачем жить?';
+
             // Выбираем случайный промпт
             const prompt = prompts[Math.floor(Math.random() * prompts.length)];
             console.log('Using prompt:', prompt);
@@ -158,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Используем Puter.js для генерации текста
-            const response = await puter.ai.chat(systemPrompt + prompt);
+            const response = await puter.ai.chat(systemPrompt + `\nВопрос: ${question}\n` + prompt);
             
             console.log('Response:', response);
             reasonDiv.textContent = response;
